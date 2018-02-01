@@ -6,8 +6,6 @@ import operator
 import subprocess
 import bioptools
 
-from IPython import embed
-
 from numpy import mean
 
 # Function uses to quickly write the script bioptools.py, which allows bioptool C scripts to be
@@ -120,14 +118,6 @@ if __name__ == "__main__":
 	pdb_dir = os.path.dirname(pdbfile)
 	base_name = os.path.basename(pdbfile)
 
-
-	#x = bioptools.pdbcount(pdbfile)
-	# chains = bioptools.pdbchain(pdbfile).split("\n")
-
-	# atom_count = 0
-	# for atom in chains:
-	# 	if "ATOM" not in atom:
-	# 		print atom
 	cleanUp("/home/tom/phd/pdbTestFiles/tmp_dir")
 
 	tmpdircontent = separateStructure(pdb_dir,base_name)
@@ -154,13 +144,5 @@ if __name__ == "__main__":
 
 	outfile = os.path.splitext(pdbfile)[0]+"exploded.pdb"
 	appendFiles(outfile, transfiles)
-	
-	# from IPython import embed
-	# embed()
-	
-	#print x
-	#print bioptools.pdbavbr(pdbfile)
-
-	#bioptools.pdb2pdbml(pdbfile)
 
 	cleanUp(tmpdir)
