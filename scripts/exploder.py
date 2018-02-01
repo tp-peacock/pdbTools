@@ -15,16 +15,6 @@ def args():
 	parser.add_argument('-m', '--mult', type=float, default = 2.0, help='multiplier that controls how far chains are separated', required=False)
 	return parser.parse_args()
 
-# Function uses to quickly write the script bioptools.py, which allows bioptool C scripts to be
-# easily accessed through a python module
-def printFunctionsForTools():
-	biopToolsDir = "/home/tom/phd/bioptools/src"
-	for file in os.listdir(biopToolsDir):
-    	 if file.endswith(".c"):
-        	functionname = os.path.splitext(file)[0]
-         	print "def "+functionname+"(toolarg):"
-         	print "	return subprocess.check_output(['"+biopToolsDir+"/"+functionname+"',toolarg])"
-
 
 def separateStructure(pdb_dir,base_name):
 	directory = pdb_dir+"/tmp_dir"
