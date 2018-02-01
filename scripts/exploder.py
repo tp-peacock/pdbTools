@@ -5,8 +5,15 @@ import shutil
 import operator
 import subprocess
 import bioptools
+import argparse
 
 from numpy import mean
+
+def args():
+	parser = argparse.ArgumentParser(description='exploder.py. Will provide a pdb file with separated chain structure.')
+	parser.add_argument('-f', '--file', type=str, help='input pdb file', required=True)
+	parser.add_argument('-m', '--mult', type=float, default = 2.0, help='multiplier that controls how far chains are separated', required=False)
+	return parser.parse_args()
 
 # Function uses to quickly write the script bioptools.py, which allows bioptool C scripts to be
 # easily accessed through a python module
@@ -111,14 +118,11 @@ def appendFiles(masterfile,files):
 		f.close()
 	m.close()
 
-
-if __name__ == "__main__":
-
-	pdbfile = "/home/tom/phd/pdbTestFiles/1AO7.pdb"
+def explode(pdbfile, mult):
 	pdb_dir = os.path.dirname(pdbfile)
 	base_name = os.path.basename(pdbfile)
 
-	cleanUp("/home/tom/phd/pdbTestFiles/tmp_dir")
+	cleanUp(pdb_dir+"/tmp_dir")
 
 	tmpdircontent = separateStructure(pdb_dir,base_name)
 	tmpdir = tmpdircontent[0]
@@ -126,7 +130,7 @@ if __name__ == "__main__":
 	cres = getCentralRes(pdbfile)
 	centroid = getCentroid(pdbfile)
 
-	mult = 2
+	
 	transfiles = []
 
 	for file in tmpdircontent[1:][0]:
@@ -146,3 +150,13 @@ if __name__ == "__main__":
 	appendFiles(outfile, transfiles)
 
 	cleanUp(tmpdir)
+
+
+if __name__ == "__main__":
+
+	args = args()
+	pdbfile = args.file
+	mult = args.mult
+	explode(pdbfile, mult)
+
+
