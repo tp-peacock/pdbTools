@@ -5,18 +5,15 @@ import shutil
 import operator
 import subprocess
 import bioptools
+import argparse
 
 from numpy import mean
 
-# Function uses to quickly write the script bioptools.py, which allows bioptool C scripts to be
-# easily accessed through a python module
-def printFunctionsForTools():
-	biopToolsDir = "/home/tom/phd/bioptools/src"
-	for file in os.listdir(biopToolsDir):
-    	 if file.endswith(".c"):
-        	functionname = os.path.splitext(file)[0]
-         	print "def "+functionname+"(toolarg):"
-         	print "	return subprocess.check_output(['"+biopToolsDir+"/"+functionname+"',toolarg])"
+def args():
+	parser = argparse.ArgumentParser(description='exploder.py. Will provide a pdb file with separated chain structure.')
+	parser.add_argument('-f', '--file', type=str, help='input pdb file', required=True)
+	parser.add_argument('-m', '--mult', type=float, default = 2.0, help='multiplier that controls how far chains are separated', required=False)
+	return parser.parse_args()
 
 
 def separateStructure(pdb_dir,base_name):
@@ -29,7 +26,8 @@ def separateStructure(pdb_dir,base_name):
 	
 	cwd = os.getcwd()
 	os.chdir(directory)
-	shutil.copy2("../"+base_name,directory)	
+	shutil.copy2("../"+base_name,directory)
+	print "Calling bioptools..."
 	chains = bioptools.pdbsplitchains(base_name)
 	cleanUp(base_name)
 	
@@ -82,8 +80,6 @@ def getCentroid(pdbfile):
 		 	residueZ.append(float(atom[8]))
 
 	centroid = (mean(residueX), mean(residueY), mean(residueZ))
-	print centroidID, centroid
-
 	return centroid
 
 def getDistance(point1, point2):
@@ -111,14 +107,11 @@ def appendFiles(masterfile,files):
 		f.close()
 	m.close()
 
-
-if __name__ == "__main__":
-
-	pdbfile = "/home/tom/phd/pdbTestFiles/1AO7.pdb"
+def explode(pdbfile, mult):
 	pdb_dir = os.path.dirname(pdbfile)
 	base_name = os.path.basename(pdbfile)
 
-	cleanUp("/home/tom/phd/pdbTestFiles/tmp_dir")
+	cleanUp(pdb_dir+"/tmp_dir")
 
 	tmpdircontent = separateStructure(pdb_dir,base_name)
 	tmpdir = tmpdircontent[0]
@@ -126,7 +119,7 @@ if __name__ == "__main__":
 	cres = getCentralRes(pdbfile)
 	centroid = getCentroid(pdbfile)
 
-	mult = 2
+	
 	transfiles = []
 
 	for file in tmpdircontent[1:][0]:
@@ -146,3 +139,21 @@ if __name__ == "__main__":
 	appendFiles(outfile, transfiles)
 
 	cleanUp(tmpdir)
+	print "Temporary files removed"
+
+	return outfile
+
+def summary(outfile,mult):
+	print "Structure separated by distance factor",mult
+	print "Exploded structure saved to "+outfile
+
+
+if __name__ == "__main__":
+
+	args = args()
+	pdbfile = args.file
+	mult = args.mult
+	outfile = explode(pdbfile, mult)
+	summary(outfile,mult)
+
+
