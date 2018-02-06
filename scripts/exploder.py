@@ -26,7 +26,8 @@ def separateStructure(pdb_dir,base_name):
 	
 	cwd = os.getcwd()
 	os.chdir(directory)
-	shutil.copy2("../"+base_name,directory)	
+	shutil.copy2("../"+base_name,directory)
+	print "Calling bioptools..."
 	chains = bioptools.pdbsplitchains(base_name)
 	cleanUp(base_name)
 	
@@ -79,8 +80,6 @@ def getCentroid(pdbfile):
 		 	residueZ.append(float(atom[8]))
 
 	centroid = (mean(residueX), mean(residueY), mean(residueZ))
-	print centroidID, centroid
-
 	return centroid
 
 def getDistance(point1, point2):
@@ -140,6 +139,13 @@ def explode(pdbfile, mult):
 	appendFiles(outfile, transfiles)
 
 	cleanUp(tmpdir)
+	print "Temporary files removed"
+
+	return outfile
+
+def summary(outfile,mult):
+	print "Structure separated by distance factor",mult
+	print "Exploded structure saved to "+outfile
 
 
 if __name__ == "__main__":
@@ -147,6 +153,7 @@ if __name__ == "__main__":
 	args = args()
 	pdbfile = args.file
 	mult = args.mult
-	explode(pdbfile, mult)
+	outfile = explode(pdbfile, mult)
+	summary(outfile,mult)
 
 
