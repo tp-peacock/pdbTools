@@ -1,0 +1,78 @@
+proc reset_viz {molid} {
+  # operate only on existing molecules
+  if {[lsearch [molinfo list] $molid] >= 0} {
+    # delete all representations
+    set numrep [molinfo $molid get numreps]
+    for {set i 0} {$i < $numrep} {incr i} {
+      mol delrep $i $molid
+    }
+    # add new representations
+    mol color Chain
+    mol representation Surf 0.3
+    mol selection all
+    mol material Edgy
+    mol addrep $molid
+ 
+  } 
+}
+
+proc reset_viz_proxy {args} {
+  foreach {fname molid rw} $args {}
+  eval "after idle {reset_viz $molid}"
+}
+
+## hook up the function.
+
+trace variable vmd_initialize_structure w reset_viz_proxy
+
+# take care of molecule loaded at start.
+
+after idle {
+  reset_viz 0
+  color change rgb  11 0.97 0.72 0 ;# gold
+  color change rgb  12 0.46 0.47 0.93 ;# bluepurple
+  color change rgb  13 0.95 0.53 0 ;# orange
+  color change rgb  14 0.24 0.2 0.55 ;# deepblue
+  color change rgb  15 0.66 0.86 0.82 ;# mint
+  color change rgb  16 0.4 0.87 0.95 ;# turquoise
+  color change rgb  17 0.93 0.03 0.41 ;# hotpink
+  color change rgb  18 0.76 0.0 0.98 ;# brightpurple
+  color change rgb  19 0.95 0.36 0.02 ;# deeporange
+  color change rgb  20 0.92 0.84 0.22 ;# peagreen
+  color change rgb  21 0.39 0.17 0.19 ;# redbrown
+  color change rgb  22 0.98 0.87 0.39 ;# fadedyellow
+  color change rgb  23 0.69 1.0 0.46 ;# limegreen
+  color change rgb  24 0.35 0.35 0.29 ;# slategrey
+  color change rgb  25 0.98 0.87 0.79 ;# cream
+  color change rgb  26 0.68 0.2 0.24 ;# fadedred
+  color change rgb  27 0.03 0.3 0.38 ;# darkturquoise
+  color change rgb  28 0.42 0.35 0.22 ;# woodbrown
+  color change rgb  29 0.34 0.43 0.24 ;# forestgreen
+  color change rgb  30 0.62 0.53 0.69 ;# lightpurple
+
+  color Chain A 11
+  color Chain C 12
+  color Chain D 13
+  color Chain E 14
+  color Chain F 15
+  color Chain G 16
+  color Chain H 17
+  color Chain I 18
+  color Chain J 19
+  color Chain K 20
+  color Chain L 21
+  color Chain M 22
+  color Chain N 23
+  color Chain O 24
+  color Chain P 25
+  color Chain Q 26
+  color Chain R 27
+  color Chain S 28
+  color Chain T 29
+  color Chain U 30
+
+}
+
+rock x by 4
+
+color Display Background white

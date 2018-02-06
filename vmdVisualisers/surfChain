@@ -42,6 +42,6 @@ after idle {
 
 }
 
-#rock x by 0.1
+rock y by 0.5
 
 color Display Background white
