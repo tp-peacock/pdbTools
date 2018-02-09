@@ -11,8 +11,12 @@ def pdbflip(toolarg):
 	return subprocess.check_output(['/home/tom/phd/bioptools/src/pdbflip',toolarg])
 def pdbcter(toolarg):
 	return subprocess.check_output(['/home/tom/phd/bioptools/src/pdbcter',toolarg])
+
 def chaincontacts(toolarg):
-	return subprocess.check_output(['/home/tom/phd/bioptools/src/chaincontacts',toolarg])
+	toolarg = ['/home/tom/phd/bioptools/src/chaincontacts'] + toolarg
+	return subprocess.check_output(toolarg)
+
+
 def pdbgetresidues(toolarg):
 	return subprocess.check_output(['/home/tom/phd/bioptools/src/pdbgetresidues',toolarg])
 def pdbfindresrange(toolarg):
@@ -23,8 +27,6 @@ def pdbtranslate(toolarg):
 	if len(toolarg) == 4:
 		return subprocess.call(['/home/tom/phd/bioptools/src/pdbtranslate',"-x ",str(toolarg[0]),"-y ",str(toolarg[1]),"-z ",str(toolarg[2]),toolarg[3]])
 	elif len(toolarg) == 5:
-		from IPython import embed
-		#embed()
 		return subprocess.call(['/home/tom/phd/bioptools/src/pdbtranslate',"-x ",str(toolarg[0]),"-y ",str(toolarg[1]),"-z ",str(toolarg[2]),toolarg[3],toolarg[4]])
 	else:
 		print "Error in pdbtranslate: wrong number of arguments"

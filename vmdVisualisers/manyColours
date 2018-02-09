@@ -54,25 +54,28 @@ after idle {
   color Chain C 12
   color Chain D 13
   color Chain E 14
-  color Chain F 15
-  color Chain G 16
-  color Chain H 17
-  color Chain I 18
-  color Chain J 19
-  color Chain K 20
-  color Chain L 21
-  color Chain M 22
-  color Chain N 23
-  color Chain O 24
-  color Chain P 25
-  color Chain Q 26
-  color Chain R 27
-  color Chain S 28
-  color Chain T 29
-  color Chain U 30
+  color Chain Y 25
+  color Chain Z 23
+
+#  color Chain F 15
+#  color Chain G 16
+#  color Chain H 17
+#  color Chain I 18
+#  color Chain J 19
+#  color Chain K 20
+#  color Chain L 21
+#  color Chain M 22
+#  color Chain N 23
+#  color Chain O 24
+#  color Chain P 25
+#  color Chain Q 26
+#  color Chain R 27
+#  color Chain S 28
+#  color Chain T 29
+#  color Chain U 30
 
 }
 
-rock x by 4
+rock x by 0.5
 
 color Display Background white
