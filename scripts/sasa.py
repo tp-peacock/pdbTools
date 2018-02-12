@@ -8,13 +8,18 @@ def args():
 	parser = argparse.ArgumentParser(description='sasa.py. Produces pdb files with contact residues given dummy chains for highlighting in vmd.')
 	parser.add_argument('-f', '--file', type=str, help='input pdb file', required=True)
 	parser.add_argument('-e', '--expl', action='store_true', help='produces exploded structure of original pdb', required=False) 
+	parser.add_argument('-m', '--mult', type=float, default = 2.0, help='multiplier that controls how far chains are separated for exploder', required=False)
+	parser.add_argument('-x', '--x', type=str, help='Specify the chain/s to which other chains form contacts', required=False)
+	parser.add_argument('-y', '--y', type=str, help='Specify the chain/s to which other chains form contacts', required=False)
 	return parser.parse_args()
 
 
 def chainContacts(pdbfile):
 	tmpfile = "tmp.ca"
-	#bioptools.chaincontacts(['-x','D','-y','A',pdbfile,tmpfile])
-	bioptools.chaincontacts([pdbfile,tmpfile])
+	toolarg = [pdbfile,tmpfile]
+	if args.y: toolarg = ['-y',args.y] + toolarg
+	if args.x: toolarg = ['-x',args.x] + toolarg
+	bioptools.chaincontacts(toolarg)
 	return tmpfile
 
 def cleanUp(rubbish):
@@ -72,7 +77,7 @@ if __name__ == "__main__":
 	contacts = readContacts(tmpfile)
 
 	if args.expl:
-		efile = exploder.explode(args.file,2)
+		efile = exploder.explode(args.file, args.mult)
 		rewritePDB(efile, contacts)
 	else:
 		rewritePDB(args.file, contacts)
